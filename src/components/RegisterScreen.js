@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const RegisterForm = () => {
   const [fullName, setFullName] = useState('');
@@ -6,8 +7,10 @@ const RegisterForm = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -15,10 +18,32 @@ const RegisterForm = () => {
       return;
     }
 
-    // Submit form logic here
+    try {
+      // Reset error and success messages
+      setPasswordError('');
+      setErrorMessage('');
+      setSuccessMessage('');
 
-    setPasswordError('');
-    alert('Registration successful!');
+      // Prepare the data to be sent to the backend
+      const data = {
+        name: fullName,
+        email,
+        password,
+      };
+
+      // Make the API request to register the user
+      const response = await axios.post('http://127.0.0.1:5000/api/users/', data);
+
+      // Handle success
+      setSuccessMessage('Registration successful!');
+      setFullName('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+    } catch (error) {
+      // Handle error
+      setErrorMessage(error.response?.data?.message || 'Registration failed. Please try again.');
+    }
   };
 
   return (
@@ -88,6 +113,8 @@ const RegisterForm = () => {
           >
             Register
           </button>
+          {successMessage && <p className="text-green-500 text-xs text-center mt-4">{successMessage}</p>}
+          {errorMessage && <p className="text-red-500 text-xs text-center mt-4">{errorMessage}</p>}
           <p className="text-gray-600 text-xs text-center mt-4">
             By clicking Register, you agree to accept Apex Financial's{' '}
             <a href="#" className="text-blue-500 hover:underline">Terms and Conditions</a>.
