@@ -3,8 +3,8 @@ import Carousel from '../components/Carousel ';
 import FeaturedProducts from '../components/FeaturedProducts';
 import Categories from '../components/Categories';
 import CategoriesList from '../components/CategoriesList';
-import ProductDetails from '../components/ProductDetails';
 import TopPicks from '../components/TopPicks';
+import ProductList from '../components/ProductList';
 
 const HomePage = () => {const sampleProduct = {
   title: 'Sample Product',
@@ -28,7 +28,9 @@ const HomePage = () => {const sampleProduct = {
       <section className="my-8">
         <FeaturedProducts />
       </section>
-      <ProductDetails product={sampleProduct} />
+      <section className="my-8">
+        <ProductList />
+      </section>
 
       {/* Category with Product Cards */}
       
